@@ -14,14 +14,14 @@ GROUP BY o.staff_id
 ORDER BY COUNT(o.order_id) DESC 
 LIMIT 3;
 
--- Q#4
+-- Q#3
 SELECT o.* 
 FROM orders o 
 JOIN customers c 
 	ON o.customer_id = c.customer_id 
 WHERE o.order_status = 'Processing' OR c.first_name LIKE 'A%';
 
--- Q#5
+-- Q#4
 SELECT product_id, 
 	   product_name, 
 	   list_price
