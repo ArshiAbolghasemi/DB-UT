@@ -21,3 +21,10 @@ JOIN customers c
 	ON o.customer_id = c.customer_id 
 WHERE o.order_status = 'Processing' OR c.first_name LIKE 'A%';
 
+-- Q#5
+SELECT product_id, 
+	   product_name, 
+	   list_price
+FROM products 
+WHERE list_price > (SELECT AVG(list_price) as average_price FROM products);
+
