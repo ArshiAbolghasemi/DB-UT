@@ -28,3 +28,27 @@ SELECT product_id,
 FROM products 
 WHERE list_price > (SELECT AVG(list_price) as average_price FROM products);
 
+-- Q#5
+WITH temp AS 
+(
+	SELECT store_id, 
+		   COUNT(staff_id) as staffs_count 
+	FROM staffs GROUP BY store_id
+)
+SELECT store_id
+FROM temp 
+WHERE temp.staffs_count >=2 AND store_id IN (SELECT store_id FROM customers WHERE LENGTH(first_name) = 5);
+
+-- Q#6
+WITH temp AS 
+(
+	SELECT store_id, 
+		   COUNT(staff_id) AS stafss_count_with_name_len_5 
+	FROM staffs 
+	WHERE LENGTH(first_name) = 5 
+	GROUP BY store_id
+) 
+SELECT store_id 
+FROM temp 
+WHERE stafss_count_with_name_len_5 >= 2;
+
