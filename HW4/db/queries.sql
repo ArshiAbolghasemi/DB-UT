@@ -5,3 +5,12 @@ LEFT JOIN orders o
 	ON c.customer_id = o.customer_id 
 WHERE o.customer_id IS NULL;
 
+-- Q#2
+SELECT s.first_name, s.last_name 
+FROM staffs s 
+JOIN orders o 
+	ON s.staff_id = o.staff_id 
+GROUP BY o.staff_id 
+ORDER BY COUNT(o.order_id) DESC 
+LIMIT 3;
+
