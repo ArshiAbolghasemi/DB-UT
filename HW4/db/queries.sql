@@ -123,3 +123,14 @@ WITH temp AS
 ) 
 SELECT product_id, count_customers FROM temp WHERE count_customers > 40;
 
+-- Q#11
+SELECT DISTINCT c.customer_id, 
+	   c.first_name, 
+	   c.last_name 
+FROM orders o 
+JOIN customers c 
+	ON o.customer_id = c.customer_id 
+JOIN stores s 
+	ON o.store_id = s.store_id 
+WHERE c.city != s.city;
+
