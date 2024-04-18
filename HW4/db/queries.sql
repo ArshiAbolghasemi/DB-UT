@@ -230,3 +230,12 @@ BEGIN
 	END IF; 
 END;
 
+CREATE TRIGGER customer_phone_check_insert
+BEFORE INSERT ON customers
+FOR EACH ROW
+BEGIN
+    IF NOT NEW.phone REGEXP '^[0-9]{7,15}$' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error:Phone number must have between 7 and 15 digits!';
+    END IF;
+END;
+
