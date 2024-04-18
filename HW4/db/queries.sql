@@ -134,3 +134,21 @@ JOIN stores s
 	ON o.store_id = s.store_id 
 WHERE c.city != s.city;
 
+-- Q#13
+CREATE VIEW order_item_product_name_order_status AS 
+SELECT oi.item_id AS order_item_id, 
+	   CASE 
+			WHEN o.order_status = 1 THEN 'Pending' 
+			WHEN o.order_status = 2 THEN 'Processing' 
+			WHEN o.order_status = 3 THEN 'Rejected' 
+			WHEN o.order_status = 4 THEN 'Completed' 
+	   END AS order_status, 
+	   p.product_name 
+FROM order_items oi
+JOIN orders o 
+	ON oi.order_id = o.order_id 
+JOIN products p 
+	ON oi.product_id = p.product_id;
+
+
+
