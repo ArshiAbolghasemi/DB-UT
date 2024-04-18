@@ -109,3 +109,17 @@ WHERE p.product_id IN (SELECT product_id
 					   ON t1.brand_id = t2.brand_id 
 					   WHERE t1.brand_id = t2.brand_id AND t1.orders_quantity = t2.max_sales_quantity);
 
+-- Q#10
+WITH temp AS 
+(
+	SELECT oi.product_id, 
+		   COUNT(c.customer_id) AS count_customers 
+	FROM orders o 
+	JOIN order_items oi 
+		ON oi.order_id = o.order_id 
+	JOIN customers c 
+		ON c.customer_id = o.customer_id 
+	GROUP BY oi.product_id
+) 
+SELECT product_id, count_customers FROM temp WHERE count_customers > 40;
+
