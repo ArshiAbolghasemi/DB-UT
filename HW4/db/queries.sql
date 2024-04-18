@@ -230,6 +230,7 @@ BEGIN
 	END IF; 
 END;
 
+-- Q#17
 CREATE TRIGGER customer_phone_check_insert
 BEFORE INSERT ON customers
 FOR EACH ROW
