@@ -153,5 +153,27 @@ JOIN orders o
 JOIN products p 
 	ON oi.product_id = p.product_id;
 
-
+-- Q#14
+CREATE VIEW store_brand_min_auntity AS 
+WITH temp AS 
+(
+	SELECT s.store_id, 
+		   p.brand_id, 
+		   SUM(sps.quantity) as total_quantity_brand 
+	FROM stocks sps 
+	JOIN products p 
+		ON sps.product_id = p.product_id 
+	JOIN stores s 
+		ON sps.store_id = s.store_id 
+	GROUP BY s.store_id, p.brand_id
+) 
+SELECT t1.store_id, 
+	   t1.brand_id 
+FROM temp t1 
+JOIN (SELECT store_id, 
+			 MIN(total_quantity_brand) AS brand_min_quantity 
+	  FROM temp 
+	  GROUP BY store_id) t2 
+ON t1.store_id = t2.store_id 
+WHERE t1.total_quantity_brand = t2.brand_min_quantity;
 
