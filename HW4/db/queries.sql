@@ -52,3 +52,24 @@ SELECT store_id
 FROM temp 
 WHERE stafss_count_with_name_len_5 >= 2;
 
+-- Q#7
+WITH temp AS 
+(
+	SELECT customer_id, 
+	       COUNT(DISTINCT o.order_id) AS total_orders_count,
+		   SUM(oi.quantity) / COUNT(DISTINCT o.order_id) AS avg_quantity
+    FROM orders o 
+	JOIN order_items oi 
+		ON o.order_id = oi.order_id 
+	GROUP BY customer_id
+) 
+SELECT c.customer_id, 
+       c.first_name, 
+	   c.last_name, 
+	   t.avg_quantity
+FROM customers c 
+JOIN temp t 
+	ON c.customer_id = t.customer_id 
+WHERE t.total_orders_count > 8;
+
+
