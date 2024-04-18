@@ -158,7 +158,6 @@ FROM temp t
 JOIN categories c 
 	ON t.category_id = t.category_id;
 
-
 -- Q#13
 CREATE VIEW order_item_product_name_order_status AS 
 SELECT oi.item_id AS order_item_id, 
@@ -198,4 +197,16 @@ JOIN (SELECT store_id,
 	  GROUP BY store_id) t2 
 ON t1.store_id = t2.store_id 
 WHERE t1.total_quantity_brand = t2.brand_min_quantity;
+
+-- Q#15
+CREATE TRIGGER inc_stocks_qnt_dlt_oi
+AFTER DELETE ON order_items 
+FOR EACH ROW 
+UPDATE stocks 
+SET quantity = quantity + OLD.quantity 
+WHERE product_id = OLD.product_id AND store_id = (SELECT DISTINCT store_id 
+												  FROM order_items oi 
+												  JOIN orders o 
+												      ON oi.order_id = o.order_id 
+												  WHERE o.order_id = OLD.order_id);
 
