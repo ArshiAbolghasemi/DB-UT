@@ -121,7 +121,10 @@ WITH temp AS
 		ON c.customer_id = o.customer_id 
 	GROUP BY oi.product_id
 ) 
-SELECT product_id, count_customers FROM temp WHERE count_customers > 40;
+SELECT product_id, count_customers 
+FROM temp 
+WHERE count_customers > 40
+ORDER BY count_customers DESC;
 
 -- Q#11
 SELECT DISTINCT c.customer_id, 
