@@ -72,4 +72,15 @@ JOIN temp t
 	ON c.customer_id = t.customer_id 
 WHERE t.total_orders_count > 8;
 
+-- Q#8
+SELECT p.product_id, 
+       p.product_name, 
+	   sps.quantity 
+FROM stocks sps 
+JOIN products p 
+	ON sps.product_id = p.product_id 
+JOIN stores s 
+	ON sps.store_id = s.store_id 
+WHERE sps.quantity > 0;
+
 
