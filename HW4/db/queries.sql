@@ -137,6 +137,28 @@ JOIN stores s
 	ON o.store_id = s.store_id 
 WHERE c.city != s.city;
 
+-- Q#12
+CREATE VIEW category_sales_per_day AS 
+WITH temp AS 
+(
+	SELECT p.category_id, 
+		   o.order_date, 
+		   SUM(oi.quantity * oi.list_price) as total_sales 
+	FROM order_items oi 
+	JOIN orders o 
+		ON oi.order_id = o.order_id 
+	JOIN products p 
+		ON p.product_id = oi.product_id 
+	GROUP BY p.category_id, o.order_date
+) 
+SELECT c.category_name, 
+	   t.order_date as date, 
+	   t.total_sales 
+FROM temp t 
+JOIN categories c 
+	ON t.category_id = t.category_id;
+
+
 -- Q#13
 CREATE VIEW order_item_product_name_order_status AS 
 SELECT oi.item_id AS order_item_id, 
