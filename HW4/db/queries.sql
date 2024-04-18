@@ -209,4 +209,24 @@ WHERE product_id = OLD.product_id AND store_id = (SELECT DISTINCT store_id
 												  JOIN orders o 
 												      ON oi.order_id = o.order_id 
 												  WHERE o.order_id = OLD.order_id);
+-- Q#16
+CREATE TRIGGER adding_staffs_manger_full 
+BEFORE UPDATE ON staffs  
+FOR EACH ROW 
+BEGIN 
+	DECLARE manager_staff_count INT; 
+	
+	IF OLD.manager_id <> NEW.manager_id THEN 
+		SELECT COUNT(s1.staff_id) INTO manager_staff_count  
+		FROM staffs s1  
+		JOIN staffs s2 
+			ON s1.manager_id = s2.staff_id  
+		WHERE s2.staff_id = NEW.manager_id 
+		GROUP BY s1.manager_id; 
+
+		IF manager_staff_count > 1 THEN  
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error:Specific manager is full!'; 
+		END IF; 
+	END IF; 
+END;
 
