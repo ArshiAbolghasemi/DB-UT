@@ -83,4 +83,29 @@ JOIN stores s
 	ON sps.store_id = s.store_id 
 WHERE sps.quantity > 0;
 
+-- Q#9
+WITH temp AS 
+(
+	SELECT p.product_id, 
+		   p.brand_id, 
+		   SUM(oi.quantity) AS orders_quantity 
+	FROM products p 
+	JOIN order_items oi 
+		ON p.product_id = oi.product_id 
+	GROUP BY brand_id, product_id
+)
+SELECT b.brand_name, 
+	   p.product_id, 
+	   p.list_price 
+FROM products p 
+JOIN brands b 
+	ON p.brand_id = b.brand_id 
+WHERE p.product_id IN (SELECT product_id 
+					   FROM temp t1 
+					   JOIN (SELECT brand_id, 
+					   				MAX(orders_quantity) AS max_sales_quantity 
+									FROM temp 
+									GROUP BY brand_id) t2 
+					   ON t1.brand_id = t2.brand_id 
+					   WHERE t1.brand_id = t2.brand_id AND t1.orders_quantity = t2.max_sales_quantity);
 
